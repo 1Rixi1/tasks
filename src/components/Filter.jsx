@@ -2,38 +2,28 @@ import React from 'react'
 
 import { Tabs, Tab } from '@mui/material';
 
-import { useDispatch, useSelector } from 'react-redux';
 
-import { sortArr } from '../redux/actions/filter'
-
-
-const sort = {
-  'all': 0,
-  'active': 1,
-  'completed': 2,
-}
-
-
+import { useDispatch, useSelector } from 'react-redux'
 
 export const Filter = () => {
 
   const dispatch = useDispatch()
 
-  const filterBy = useSelector(store => store.filter.filterBy)
+  const filterBy = useSelector(state => state.filterBy)
 
+  const handleClickTab = (_, i) => {
+    const status = filterIndex[i]
 
-
-  const handleClickSort = (index) => {
-
-    const status = Object.keys(sort)[index]
-
-    dispatch(sortArr(status))
-
+    dispatch({
+      type: 'SET_FILTER',
+      payload: status
+    })
   }
 
+  const filterIndex = ['all', 'active', 'completed']
 
   return (
-    <Tabs onChange={(_, index) => handleClickSort(index)} value={sort[filterBy]}>
+    <Tabs onChange={handleClickTab} value={filterIndex.findIndex(i => i === filterBy)}>
       <Tab label="Все" />
       <Tab label="Активные" />
       <Tab label="Завершённые" />

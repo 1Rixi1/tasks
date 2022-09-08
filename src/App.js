@@ -1,11 +1,12 @@
 import React from 'react'
 
-import { Paper, Divider, Button, List, Tabs, Tab } from '@mui/material';
+import { Paper, Divider, Button, List } from '@mui/material';
 import { AddField } from './components/AddField';
 import { Item } from './components/Item';
 
 
 import { useDispatch, useSelector } from 'react-redux'
+import { Filter } from './components/Filter';
 
 
 function App() {
@@ -55,16 +56,9 @@ function App() {
     })
   }
 
-  const handleClickTab = (_, i) => {
-    const status = filterIndex[i]
 
-    dispatch({
-      type: 'SET_FILTER',
-      payload: status
-    })
-  }
 
-  const filterIndex = ['all', 'active', 'completed']
+
 
   return (
     <div className="App">
@@ -75,11 +69,7 @@ function App() {
         <AddField addTask={handleClickTask} />
         <Divider />
 
-        <Tabs onChange={handleClickTab} value={filterIndex.findIndex(i => i === state.filterBy)}>
-          <Tab label="Все" />
-          <Tab label="Активные" />
-          <Tab label="Завершённые" />
-        </Tabs>
+        <Filter />
 
         <Divider />
         <List>
