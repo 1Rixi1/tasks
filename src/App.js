@@ -5,107 +5,14 @@ import { AddField } from './components/AddField';
 import { Item } from './components/Item';
 
 
-const reducer = (state, action) => {
-
-  if (action.type === 'ADD_TASK') {
-    return {
-      ...state,
-      tasks: [
-        ...state.tasks,
-        {
-          id: state.length + 1,
-          text: action.payload.text,
-          completed: action.payload.completed
-        }
-      ]
-    }
-  }
-
-  if (action.type === 'REMOVE_TASK') {
-    return {
-      ...state,
-      tasks: state.tasks.filter(obj => obj.id !== action.payload)
-    }
-  }
-
-  if (action.type === 'ALL_REMOVE') {
-    return {
-      ...state,
-      tasks: []
-    }
-  }
-
-  if (action.type === 'TOGGLE_COMPLETED') {
-    return {
-      ...state,
-      tasks: state.tasks.map(obj => {
-        if (obj.id === action.payload) {
-
-          return {
-            ...obj,
-            completed: !obj.completed
-          }
-
-        }
-        return obj
-      })
-    }
-  }
-
-  if (action.type === 'ALL_COMPLETED') {
-    return {
-      ...state,
-      tasks: state.tasks.map(obj => {
-        return {
-          ...obj,
-          completed: true
-        }
-      })
-    }
-  }
-
-  if (action.type === 'SET_FILTER') {
-    return {
-      ...state,
-      filterBy: action.payload
-    }
-  }
-
-}
+import { useDispatch, useSelector } from 'react-redux'
 
 
 function App() {
 
+  const dispatch = useDispatch()
 
-  const [state, dispatch] = React.useReducer(reducer,
-
-    {
-      filterBy: 'all',
-      tasks: [
-        {
-          id: 1,
-          text: 'Hello1',
-          completed: false
-        },
-        {
-          id: 2,
-          text: 'World2',
-          completed: true
-        },
-        {
-          id: 3,
-          text: 'World3',
-          completed: false
-        },
-        {
-          id: 4,
-          text: 'World4',
-          completed: true
-        },
-      ]
-    }
-
-  )
+  const state = useSelector(state => state)
 
 
   const handleClickTask = (text, completed) => {
@@ -117,7 +24,6 @@ function App() {
       }
     })
   }
-
 
   const removeTask = (id) => {
     if (window.confirm(`Вы хотите удалить таску ${id} ?`)) {
@@ -136,7 +42,6 @@ function App() {
     })
   }
 
-
   const toggleCompleted = (id) => {
     dispatch({
       type: 'TOGGLE_COMPLETED',
@@ -150,8 +55,6 @@ function App() {
     })
   }
 
-  const filterIndex = ['all', 'active', 'completed']
-
   const handleClickTab = (_, i) => {
     const status = filterIndex[i]
 
@@ -161,6 +64,7 @@ function App() {
     })
   }
 
+  const filterIndex = ['all', 'active', 'completed']
 
   return (
     <div className="App">
@@ -170,11 +74,13 @@ function App() {
         </Paper>
         <AddField addTask={handleClickTask} />
         <Divider />
+
         <Tabs onChange={handleClickTab} value={filterIndex.findIndex(i => i === state.filterBy)}>
           <Tab label="Все" />
           <Tab label="Активные" />
           <Tab label="Завершённые" />
         </Tabs>
+
         <Divider />
         <List>
 
