@@ -8,6 +8,7 @@ import { Item } from './components/Item';
 import { useDispatch, useSelector } from 'react-redux'
 import { Filter } from './components/Filter';
 
+import { addTask, removeTask, allRemove, toggleCompleted, allComplited } from './redux/actions/tasks'
 
 function App() {
 
@@ -17,43 +18,27 @@ function App() {
 
 
   const handleClickTask = (text, completed) => {
-    dispatch({
-      type: 'ADD_TASK',
-      payload: {
-        text,
-        completed
-      }
-    })
+    dispatch(addTask(text, completed))
   }
 
-  const removeTask = (id) => {
+  const handleRemoveTask = (id) => {
     if (window.confirm(`Вы хотите удалить таску ${id} ?`)) {
 
-      dispatch({
-        type: 'REMOVE_TASK',
-        payload: id
-      })
+      dispatch(removeTask(id))
 
     }
   }
 
-  const allRemove = () => {
-    dispatch({
-      type: 'ALL_REMOVE'
-    })
+  const handleAllRemove = () => {
+    dispatch(allRemove())
   }
 
-  const toggleCompleted = (id) => {
-    dispatch({
-      type: 'TOGGLE_COMPLETED',
-      payload: id
-    })
+  const handleToggleCompleted = (id) => {
+    dispatch(toggleCompleted(id))
   }
 
-  const allCompleted = () => {
-    dispatch({
-      type: 'ALL_COMPLETED'
-    })
+  const handleAllCompleted = () => {
+    dispatch(allComplited())
   }
 
 
@@ -77,15 +62,15 @@ function App() {
           {
             state.tasks.filter(obj => {
 
-              if (state.filterBy === 'all') {
+              if (state.filter.filterBy === 'all') {
                 return true
               }
 
-              if (state.filterBy === 'active') {
+              if (state.filter.filterBy === 'active') {
                 return !obj.completed
               }
 
-              if (state.filterBy === 'completed') {
+              if (state.filter.filterBy === 'completed') {
                 return obj.completed
               }
 
@@ -95,8 +80,8 @@ function App() {
               key={obj.id}
               text={obj.text}
               completed={obj.completed}
-              removeTask={() => removeTask(obj.id)}
-              toggleCompleted={() => toggleCompleted(obj.id)}
+              removeTask={() => handleRemoveTask(obj.id)}
+              toggleCompleted={() => handleToggleCompleted(obj.id)}
             />
             )
           }
@@ -105,8 +90,8 @@ function App() {
         </List>
         <Divider />
         <div className="check-buttons">
-          <Button onClick={allCompleted}>Отметить всё</Button>
-          <Button onClick={allRemove}>Очистить</Button>
+          <Button onClick={handleAllCompleted}>Отметить всё</Button>
+          <Button onClick={handleAllRemove}>Очистить</Button>
         </div>
       </Paper>
     </div>

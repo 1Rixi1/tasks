@@ -5,22 +5,22 @@ import { Tabs, Tab } from '@mui/material';
 
 import { useDispatch, useSelector } from 'react-redux'
 
+import { clickTab } from '../redux/actions/filter'
+
 export const Filter = () => {
 
   const dispatch = useDispatch()
 
-  const filterBy = useSelector(state => state.filterBy)
+  const filterBy = useSelector(state => state.filter.filterBy)
+
+  const filterIndex = ['all', 'active', 'completed']
 
   const handleClickTab = (_, i) => {
     const status = filterIndex[i]
 
-    dispatch({
-      type: 'SET_FILTER',
-      payload: status
-    })
+    dispatch(clickTab(status))
   }
 
-  const filterIndex = ['all', 'active', 'completed']
 
   return (
     <Tabs onChange={handleClickTab} value={filterIndex.findIndex(i => i === filterBy)}>
